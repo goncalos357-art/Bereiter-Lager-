@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pulverlack Lager</title>
+<meta name="theme-color" content="#f28c00">
+<style>
+:root{
+  --orange:#f28c00;
+  --orange2:#ffb347;
+  --dark:#1d2433;
+  --muted:#6b7280;
+  --bg:#f3f5f8;
+  --card:#ffffff;
+  --line:#d8dee8;
+  --green:#087f5b;
+  --red:#c92a2a;
+  --blue:#1e67f2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+.hero{
+  background:linear-gradient(135deg,var(--orange),#d46f00);
+  color:white;
+  padding:18px 16px 20px;
+  border-bottom:5px solid #fff;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logoCircle{width:52px;height:52px;border-radius:50%;background:white;color:var(--orange);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px}
+h1{margin:0;font-size:25px;line-height:1.1}
+.sub{margin-top:5px;font-size:14px;opacity:.95}
+main{max-width:1150px;margin:auto;padding:14px;display:grid;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 6px 18px rgba(24,30,42,.05)}
+h2{font-size:20px;margin:0 0 12px}
+h3{font-size:16px;margin:14px 0 8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#fff8ef;border:1px solid #ffd7a4;border-radius:16px;padding:14px}
+.stat b{font-size:25px;display:block}
+label{font-size:13px;color:var(--muted);display:block;margin:8px 0 5px}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px;font-size:16px;background:white}
+textarea{resize:vertical}
+button,.filebtn{
+  border:0;border-radius:14px;padding:13px 15px;font-size:16px;font-weight:800;cursor:pointer;
+  background:var(--orange);color:white;display:inline-block;text-align:center
+}
+.secondary{background:#eef3ff!important;color:#174ea6!important}
+.green{background:var(--green)!important}.red{background:var(--red)!important}.dark{background:var(--dark)!important}
+.buttons{display:flex;flex-wrap:wrap;gap:9px;margin-top:10px}
+.hidden{display:none!important}
+.small{font-size:13px;color:var(--muted)}
+.notice{background:#fff8e6;border:1px solid #ffe0a3;color:#704500;border-radius:14px;padding:11px}
+.preview{max-width:100%;max-height:340px;object-fit:contain;background:#111;border-radius:14px;margin-top:10px}
+.item{border:1px solid var(--line);border-radius:16px;padding:13px;margin-top:10px;background:white}
+.itemTitle{font-size:18px;font-weight:900;margin-bottom:4px}
+.pill{border-radius:999px;padding:4px 9px;font-size:13px;background:#fff0dc;color:#9a5200;display:inline-block}
+.stockOk{border-left:7px solid var(--green)}
+.stockLow{border-left:7px solid var(--orange)}
+.stockEmpty{border-left:7px solid var(--red)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:100}
+.modalbox{background:#fff;width:100%;max-height:94vh;overflow:auto;border-radius:24px 24px 0 0;padding:16px}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.quick button{padding:12px 8px}
+.history{border-top:1px solid var(--line);padding-top:10px;margin-top:12px}
+.historyEntry{font-size:13px;background:#f8fafc;border-radius:10px;padding:8px;margin-top:6px}
+.labelsheet{width:92mm;min-height:60mm;background:white;border:1px solid #111;border-radius:4px;overflow:hidden}
+.labelTop{background:var(--orange);color:white;padding:5mm;font-weight:900;font-size:16px;letter-spacing:.3px}
+.labelBody{padding:4mm;display:grid;grid-template-columns:32mm 1fr;gap:4mm;align-items:center}
+.qr{width:31mm;height:31mm;border:1px solid #ddd}
+.qr img{width:100%;height:100%;object-fit:contain}
+.labelName{font-size:17px;font-weight:900}
+.labelCode{font-size:10px;word-break:break-all;margin-top:2mm}
+.scanHint{background:#eefdf7;border:1px solid #b8f0d7;color:#075c43;border-radius:14px;padding:11px}
+@media(max-width:760px){
+  .grid3,.grid2{grid-template-columns:1fr}
+  .quick{grid-template-columns:repeat(2,1fr)}
+  .labelsheet{width:100%}
+  .labelBody{grid-template-columns:1fr}
+  .qr{width:45mm;height:45mm}
+}
+@media print{
+  body{background:white}
+  .hero, main>.card:not(#printCard), .noPrint, .modal{display:none!important}
+  main{display:block;padding:0}
+  #printCard{display:block!important;border:0;box-shadow:none;padding:0}
+  .labelsheet{width:92mm;height:60mm;margin:5mm;float:left;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="brand">
+    <div class="logoCircle">B</div>
+    <div>
+      <h1>Pulverlack Lager</h1>
+      <div class="sub">Bereiter Pulver & Lack · QR-Bestand · Restmengen · Verlauf</div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="card noPrint">
+  <h2>Übersicht</h2>
+  <div class="grid3">
+    <div class="stat"><b id="statActive">0</b><span>aktive Kartons</span></div>
+    <div class="stat"><b id="statLow">0</b><span>fast leer</span></div>
+    <div class="stat"><b id="statEmpty">0</b><span>leer gemeldet</span></div>
+  </div>
+</section>
+
+<section id="scanOpenCard" class="card noPrint hidden">
+  <h2>Gescannten Karton öffnen</h2>
+  <div class="scanHint" id="scanOpenText"></div>
+</section>
+
+<section class="card noPrint">
+  <h2>Neuen Karton anlegen</h2>
+  <div class="notice small">Foto aufnehmen, Daten prüfen und anschließend ein eindeutiges QR-Etikett erzeugen.</div>
+  <div class="buttons">
+    <label class="filebtn" for="photo">Foto vom Karton aufnehmen</label>
+    <input id="photo" class="hidden" type="file" accept="image/*" capture="environment">
+    <button id="demo" class="secondary">Demo-Daten</button>
+  </div>
+  <img id="preview" class="preview hidden">
+  <label>Erkannter Text</label>
+  <textarea id="raw" rows="4" placeholder="Texterkennung erscheint hier. Felder können auch manuell ausgefüllt werden."></textarea>
+  <button id="parse" class="dark">Daten übernehmen</button>
+  <p id="status" class="small"></p>
+
+  <div class="grid2">
+    <div><label>Farbton / Bezeichnung</label><input id="name" placeholder="z. B. RAL 9001 Cremeweiß"></div>
+    <div><label>RAL</label><input id="ral" placeholder="z. B. RAL 9001"></div>
+  </div>
+  <div class="grid3">
+    <div><label>Hersteller</label><input id="maker" placeholder="Tiger / Megadur / Inverpul"></div>
+    <div><label>Charge / Batch</label><input id="batch"></div>
+    <div><label>Produktnummer</label><input id="product"></div>
+  </div>
+  <div class="grid3">
+    <div><label>Anfangsmenge kg</label><input id="kg" type="number" step="0.1"></div>
+    <div><label>Restmenge kg</label><input id="currentKg" type="number" step="0.1" placeholder="leer = Anfangsmenge"></div>
+    <div><label>Lagerort</label><input id="place" placeholder="Regal 8"></div>
+  </div>
+  <div><label>Bemerkung</label><input id="note" placeholder="optional"></div>
+  <div class="buttons">
+    <button id="save">Karton speichern + QR-Etikett</button>
+    <button id="clear" class="secondary">Felder leeren</button>
+  </div>
+</section>
+
+<section id="printCard" class="card hidden">
+  <h2 class="noPrint">QR-Etikett</h2>
+  <div id="label"></div>
+  <div class="buttons noPrint">
+    <button onclick="window.print()">A4 drucken</button>
+    <button id="hidePrint" class="secondary">Schließen</button>
+  </div>
+</section>
+
+<section class="card noPrint">
+  <h2>Karton suchen</h2>
+  <div class="grid2">
+    <input id="find" placeholder="QR-Code / Karton-Code eingeben">
+    <button id="findBtn" class="secondary">Suchen</button>
+  </div>
+  <div id="found"></div>
+</section>
+
+<section class="card noPrint">
+  <h2>Aktiver Bestand</h2>
+  <input id="search" placeholder="Suchen nach RAL, Hersteller, Charge, Code, Lagerort">
+  <div id="inventory"></div>
+</section>
+
+<section class="card noPrint">
+  <h2>Büro-Benachrichtigungen</h2>
+  <div id="notes"></div>
+</section>
+</main>
+
+<div id="editModal" class="modal hidden noPrint">
+  <div class="modalbox">
+    <h2>Karton bearbeiten</h2>
+    <input id="editCode" type="hidden">
+
+    <div id="editHead" class="scanHint"></div>
+
+    <h3>Restmenge nach dem Beschichten</h3>
+    <div class="grid2">
+      <div><label>Neue Restmenge kg</label><input id="editCurrentKg" type="number" step="0.1"></div>
+      <div><label>Mitarbeiter / Lackierer</label><input id="editWorker" placeholder="Name optional"></div>
+    </div>
+
+    <div class="quick">
+      <button class="secondary" onclick="quickSet(0)">0 kg</button>
+      <button class="secondary" onclick="quickMinus(1)">-1 kg</button>
+      <button class="secondary" onclick="quickMinus(2)">-2 kg</button>
+      <button class="secondary" onclick="quickMinus(5)">-5 kg</button>
+    </div>
+
+    <label>Bemerkung</label>
+    <textarea id="editRemark" rows="3" placeholder="z. B. Türrahmen beschichtet, Pulver klumpt leicht, Karton beschädigt"></textarea>
+
+    <h3>Stammdaten</h3>
+    <div class="grid2">
+      <div><label>Farbton / Bezeichnung</label><input id="editName"></div>
+      <div><label>RAL</label><input id="editRal"></div>
+    </div>
+    <div class="grid3">
+      <div><label>Hersteller</label><input id="editMaker"></div>
+      <div><label>Charge</label><input id="editBatch"></div>
+      <div><label>Produktnummer</label><input id="editProduct"></div>
+    </div>
+    <div class="grid3">
+      <div><label>Anfangsmenge kg</label><input id="editStartKg" type="number" step="0.1"></div>
+      <div><label>Lagerort</label><input id="editPlace"></div>
+      <div><label>Notiz</label><input id="editNote"></div>
+    </div>
+
+    <div class="buttons">
+      <button id="saveEdit" class="green">Speichern</button>
+      <button id="emptyEdit" class="red">Leer melden</button>
+      <button id="labelEdit" class="secondary">Etikett</button>
+      <button id="closeEdit" class="secondary">Schließen</button>
+    </div>
+
+    <div class="history">
+      <h3>Verlauf</h3>
+      <div id="editHistory"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+let boxes=JSON.parse(localStorage.getItem("pulverlack_boxes_pro_v1")||"[]");
+let notes=JSON.parse(localStorage.getItem("pulverlack_notes_pro_v1")||"[]");
+let last=null;
+
+function t(v){return (v||"").toString().trim()}
+function n(v){let x=parseFloat(String(v).replace(",","."));return isNaN(x)?0:x}
+function fmt(x){return (Math.round((x||0)*100)/100).toString().replace(".",",")}
+function store(){localStorage.setItem("pulverlack_boxes_pro_v1",JSON.stringify(boxes));localStorage.setItem("pulverlack_notes_pro_v1",JSON.stringify(notes));render()}
+function newCode(){let d=new Date();return "PL-"+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+"-"+String(boxes.length+1).padStart(4,"0")+"-"+Math.random().toString(36).slice(2,5).toUpperCase()}
+function addHistory(b,msg,remark,worker){
+  b.history=b.history||[];
+  b.history.push({date:new Date().toLocaleString("de-DE"),msg,remark:remark||"",worker:worker||""});
+}
+function boxUrl(code){return location.origin+location.pathname+"?code="+encodeURIComponent(code)}
+function qrUrl(code){return "https://api.qrserver.com/v1/create-qr-code/?size=260x260&data="+encodeURIComponent(boxUrl(code))}
+function statusClass(b){
+  if(b.empty) return "stockEmpty";
+  const pct=b.kg?b.currentKg/b.kg:1;
+  if(pct<=0.2) return "stockLow";
+  return "stockOk";
+}
+
+function parseText(raw){
+ raw=raw.replace(/\n/g," ");
+ let maker="";
+ if(/tiger|drylac/i.test(raw)) maker="Tiger Drylac";
+ else if(/megadur|cenaris/i.test(raw)) maker="Megadur / Cenaris";
+ else if(/inverpul|valspar/i.test(raw)) maker="Inverpul / Valspar";
+ let ral=(raw.match(/RAL\s*[- ]?\s*(\d{4})/i)||[])[1]||"";
+ let ralText=ral?"RAL "+ral:"";
+ let kg=(raw.match(/(\d+[,.]?\d*)\s*(kg|KG|Kg)/)||[])[1]||"";
+ let batch=(raw.match(/(?:Charge(?:n-?Nr\.?)?|Chargen-?Nr\.?|Batch|Lot)\s*[:#\- ]*\s*([A-Z0-9\-\/\.]+)/i)||[])[1]||"";
+ let product=(raw.match(/(?:Produkt-?Nummer|Produkt Nummer|Art\.?-?Nr\.?|Code|Art\.?-?Nr\.?)\s*[:#\- ]*\s*([A-Z0-9\-\/\.]+)/i)||[])[1]||"";
+ let name="";
+ let m1=raw.match(/RAL\s*[- ]?\s*\d{4}\s*([A-Za-zäöüÄÖÜß ]{3,28})/i); if(m1) name=(ralText+" "+m1[1]).trim();
+ if(/PE\/P BT TX WHITE RAL\s*9032/i.test(raw)) name="PE/P BT TX WHITE RAL 9032";
+ if(!name && ralText) name=ralText;
+ if(/cremeweiss|cremeweiß/i.test(raw) && ralText) name=ralText+" Cremeweiß";
+ if(/glatt/i.test(raw) && ralText && !name.toLowerCase().includes("glatt")) name += " Glatt";
+ $("maker").value=maker||$("maker").value;
+ $("ral").value=ralText||$("ral").value;
+ $("kg").value=kg?kg.replace(",","."):$("kg").value;
+ $("currentKg").value=$("currentKg").value || (kg?kg.replace(",","."):"");
+ $("batch").value=batch||$("batch").value;
+ $("product").value=product||$("product").value;
+ $("name").value=name||$("name").value;
+}
+
+$("photo").onchange=async e=>{
+ const file=e.target.files[0]; if(!file)return;
+ $("preview").src=URL.createObjectURL(file); $("preview").classList.remove("hidden");
+ $("status").textContent="Texterkennung läuft…";
+ try{
+   const r=await Tesseract.recognize(file,"deu+eng");
+   $("raw").value=r.data.text||"";
+   parseText($("raw").value);
+   $("status").textContent="Daten übernommen. Bitte prüfen."
+ }catch(err){
+   $("status").textContent="OCR konnte nicht geladen werden. Bitte Daten manuell eintragen."
+ }
+};
+$("parse").onclick=()=>parseText($("raw").value);
+$("demo").onclick=()=>{
+ $("raw").value="TIGER Drylac Pulverbeschichtung Farbton: RAL 9001 Produkt-Nummer: 29/12030 Oberfläche: Glatt Inhalt: 20 KG";
+ parseText($("raw").value);
+};
+$("clear").onclick=()=>["name","ral","maker","batch","product","kg","currentKg","place","note","raw"].forEach(id=>$(id).value="");
+
+$("save").onclick=()=>{
+ let start=n($("kg").value);
+ let cur=$("currentKg").value?t($("currentKg").value):$("kg").value;
+ let b={
+  code:newCode(),
+  name:t($("name").value),
+  ral:t($("ral").value),
+  maker:t($("maker").value),
+  batch:t($("batch").value),
+  product:t($("product").value),
+  kg:start,
+  currentKg:n(cur),
+  place:t($("place").value),
+  note:t($("note").value),
+  empty:false,
+  created:new Date().toLocaleString("de-DE"),
+  history:[]
+ };
+ if(!b.name||!b.kg){alert("Bitte mindestens Farbton/Bezeichnung und Anfangsmenge kg eintragen.");return}
+ addHistory(b,"Karton angelegt mit "+fmt(b.currentKg)+" kg Restmenge.",b.note,"");
+ boxes.push(b); last=b; store(); showLabel(b); $("printCard").classList.remove("hidden"); $("printCard").scrollIntoView({behavior:"smooth"});
+};
+
+function showLabel(b){
+ $("label").innerHTML=`<div class="labelsheet">
+  <div class="labelTop">Bereiter Pulver & Lack · Pulverlack Lager</div>
+  <div class="labelBody">
+    <div class="qr"><img src="${qrUrl(b.code)}" alt="QR"></div>
+    <div>
+      <div class="labelName">${b.name}</div>
+      <div>${b.ral||""} · ${b.maker||""}</div>
+      <div>Charge: ${b.batch||"-"}</div>
+      <div>Rest: ${fmt(b.currentKg)} / ${fmt(b.kg)} kg</div>
+      <div>Lager: ${b.place||"-"}</div>
+      <div class="labelCode"><b>${b.code}</b></div>
+    </div>
+  </div>
+ </div>`;
+}
+$("hidePrint").onclick=()=>$("printCard").classList.add("hidden");
+
+function openEdit(code){
+ let b=boxes.find(x=>x.code===code); if(!b)return;
+ $("editCode").value=b.code;
+ $("editHead").innerHTML=`<b>${b.name}</b><br>${b.code}<br>Aktuell: <b>${fmt(b.currentKg)} kg</b> von ${fmt(b.kg)} kg`;
+ $("editCurrentKg").value=b.currentKg;
+ $("editWorker").value="";
+ $("editRemark").value="";
+ $("editName").value=b.name||"";
+ $("editRal").value=b.ral||"";
+ $("editMaker").value=b.maker||"";
+ $("editBatch").value=b.batch||"";
+ $("editProduct").value=b.product||"";
+ $("editStartKg").value=b.kg||0;
+ $("editPlace").value=b.place||"";
+ $("editNote").value=b.note||"";
+ $("editHistory").innerHTML=(b.history||[]).slice().reverse().map(h=>`<div class="historyEntry"><b>${h.date}</b>${h.worker?` · ${h.worker}`:""}<br>${h.msg}${h.remark?`<br><i>${h.remark}</i>`:""}</div>`).join("")||"<p class='small'>Noch kein Verlauf.</p>";
+ $("editModal").classList.remove("hidden");
+}
+window.openEdit=openEdit;
+
+window.quickSet=kg=>$("editCurrentKg").value=kg;
+window.quickMinus=kg=>{
+ let val=n($("editCurrentKg").value);
+ $("editCurrentKg").value=Math.max(0,val-kg);
+};
+
+$("closeEdit").onclick=()=>$("editModal").classList.add("hidden");
+$("labelEdit").onclick=()=>{let b=boxes.find(x=>x.code===$("editCode").value); if(b){showLabel(b); $("printCard").classList.remove("hidden"); $("editModal").classList.add("hidden"); $("printCard").scrollIntoView({behavior:"smooth"})}}
+$("saveEdit").onclick=()=>{
+ let b=boxes.find(x=>x.code===$("editCode").value); if(!b)return;
+ let old=fmt(b.currentKg);
+ b.name=t($("editName").value);
+ b.ral=t($("editRal").value);
+ b.maker=t($("editMaker").value);
+ b.batch=t($("editBatch").value);
+ b.product=t($("editProduct").value);
+ b.kg=n($("editStartKg").value);
+ b.currentKg=n($("editCurrentKg").value);
+ b.place=t($("editPlace").value);
+ b.note=t($("editNote").value);
+ let remark=t($("editRemark").value);
+ let worker=t($("editWorker").value);
+ if(b.currentKg<=0){
+   b.empty=true;b.currentKg=0;
+   notes.push({title:"Karton leer",date:new Date().toLocaleString("de-DE"),body:`${b.name} · ${b.code} wurde auf 0 kg gesetzt und aus dem aktiven Bestand entfernt.`});
+ }
+ addHistory(b,"Restmenge geändert von "+old+" kg auf "+fmt(b.currentKg)+" kg.",remark,worker);
+ store(); $("editModal").classList.add("hidden");
+};
+$("emptyEdit").onclick=()=>{
+ let b=boxes.find(x=>x.code===$("editCode").value); if(!b)return;
+ b.empty=true;b.currentKg=0;
+ addHistory(b,"Als leer gemeldet.",t($("editRemark").value),t($("editWorker").value));
+ notes.push({title:"Karton leer",date:new Date().toLocaleString("de-DE"),body:`${b.name} · ${b.code} wurde leer gemeldet.`});
+ store(); $("editModal").classList.add("hidden");
+};
+
+function render(){
+ let active=boxes.filter(b=>!b.empty);
+ $("statActive").textContent=active.length;
+ $("statLow").textContent=active.filter(b=>b.kg && b.currentKg/b.kg<=0.2).length;
+ $("statEmpty").textContent=boxes.filter(b=>b.empty).length;
+
+ let q=t($("search").value).toLowerCase();
+ $("inventory").innerHTML=active.filter(b=>Object.values(b).join(" ").toLowerCase().includes(q)).map(b=>`
+  <div class="item ${statusClass(b)}">
+    <div class="itemTitle">${b.name} <span class="pill">${b.code}</span></div>
+    <div>${b.maker||"-"} · ${b.ral||"-"} · Charge ${b.batch||"-"} · ${b.place||"-"}</div>
+    <div><b>Rest: ${fmt(b.currentKg)} kg</b> von ${fmt(b.kg)} kg</div>
+    <div class="buttons">
+      <button class="green" onclick="openEdit('${b.code}')">Bearbeiten</button>
+      <button class="secondary" onclick="showSavedLabel('${b.code}')">Etikett</button>
+      <button class="red" onclick="quickEmpty('${b.code}')">Leer melden</button>
+    </div>
+  </div>`).join("")||"<p class='small'>Kein aktiver Bestand.</p>";
+
+ $("notes").innerHTML=notes.slice().reverse().map(x=>`<div class="item"><b>${x.title}</b><br><span class="small">${x.date}</span><br>${x.body}</div>`).join("")||"<p class='small'>Noch keine Meldungen.</p>";
+}
+window.showSavedLabel=code=>{let b=boxes.find(x=>x.code===code); if(b){showLabel(b); $("printCard").classList.remove("hidden"); $("printCard").scrollIntoView({behavior:"smooth"})}}
+window.quickEmpty=code=>{let b=boxes.find(x=>x.code===code); if(!b)return; b.empty=true;b.currentKg=0;addHistory(b,"Leer gemeldet.","","");notes.push({title:"Karton leer",date:new Date().toLocaleString("de-DE"),body:`${b.name} · ${b.code} wurde leer gemeldet.`});store()}
+$("findBtn").onclick=()=>{let c=t($("find").value);let b=boxes.find(x=>x.code.toLowerCase()===c.toLowerCase());$("found").innerHTML=b?`<div class="item ${statusClass(b)}"><b>${b.name}</b><br>Status: ${b.empty?"leer":"aktiv"} · Rest: ${fmt(b.currentKg)} kg<br><span class="pill">${b.code}</span><div class="buttons"><button class="green" onclick="openEdit('${b.code}')">Bearbeiten</button><button class="secondary" onclick="showSavedLabel('${b.code}')">Etikett</button></div></div>`:"<div class='item'>Nicht gefunden.</div>"}
+$("search").oninput=render;
+
+function openFromUrl(){
+ const params=new URLSearchParams(location.search);
+ const code=params.get("code");
+ if(!code)return;
+ let b=boxes.find(x=>x.code===code);
+ $("scanOpenCard").classList.remove("hidden");
+ if(b){
+   $("scanOpenText").innerHTML=`QR-Code erkannt: <b>${b.name}</b><br>${b.code}<br><button style="margin-top:10px" onclick="openEdit('${b.code}')">Restmenge ändern</button>`;
+ }else{
+   $("scanOpenText").innerHTML=`QR-Code erkannt, aber Karton ist auf diesem Gerät nicht gespeichert:<br><b>${code}</b>`;
+ }
+}
+render(); openFromUrl();
+</script>
+</body>
+</html>
